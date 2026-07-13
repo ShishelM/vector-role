@@ -1,0 +1,35 @@
+---
+- name: Create vector configuration directory
+  ansible.builtin.file:
+    path: "/etc/vector"
+    state: directory
+    mode: '0755'
+
+- name: Create vector data directory
+  ansible.builtin.file:
+    path: "{{ vector_data_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Download and execute official Vector installation script directly to bin
+  ansible.builtin.shell: |
+    curl --proto '=https' --tlsv1.2 -sSfL https://vector.dev | bash -s -- -y --prefix /usr/local
+  args:
+    creates: "/usr/local/bin/vector"
+
+- name: Create Systemd service unit for Vector
+  ansible.builtin.template:
+    src: vector.service.j2
+    dest: /etc/systemd/system/vector.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart vector service
+
+- name: Deploy Vector configuration from template
+  ansible.builtin.template:
+    src: vector.toml.j2
+    dest: "/etc/vector/vector.toml"
+    mode: '0644'
+  notify: Restart vector service
+

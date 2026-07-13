@@ -1,38 +1,49 @@
-Role Name
-=========
+Vector Ansible Role
+===================
 
-A brief description of the role goes here.
+Ansible-роль для автоматизированной установки, конфигурации и запуска агента сбора логов [Vector](https://vector.dev) на хостах под управлением Ubuntu/Debian.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+* Операционная система: Ubuntu 22.04 / 24.04 (или другие Debian-подобные дистрибутивы).
+* Установленные утилиты `curl` и `bash` на целевом хосте для корректной работы инсталляционного скрипта.
+* Наличие прав `sudo` (become: true) у запускающего пользователя.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+Доступные для переопределения переменные находятся в файле `defaults/main.yml`:
+
+* `vector_data_dir`: Абсолютный путь к директории, в которой Vector хранит свои внутренние данные, буферы и кэш (по умолчанию: `/var/lib/vector`).
+
+Переменные, зафиксированные внутри роли (`vars/main.yml`):
+* В данной роли жесткие переменные отсутствуют, так как официальный скрипт автоматически определяет и устанавливает актуальную версию для текущей архитектуры процессора.
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+Роль является полностью независимой и не требует наличия других ролей из Ansible Galaxy.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+Пример использования роли в основном плейбуке инфраструктуры:
 
-    - hosts: servers
+    - hosts: vector_servers
+      become: true
       roles:
-         - { role: username.rolename, x: 42 }
+         - role: vector-role
+           vars:
+             vector_data_dir: "/var/lib/vector_custom_data"
 
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Роль разработана в рамках выполнения практической работы курса DevOps.
+Автор: Pavel (https://github.com/ShishelM)

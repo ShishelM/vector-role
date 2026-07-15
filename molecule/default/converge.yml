@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Include current vector role
+      ansible.builtin.include_role:
+        name: "{{ playbook_dir }}/../.."

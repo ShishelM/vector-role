@@ -1,0 +1,12 @@
+---
+dependency:
+  name: galaxy
+platforms:
+  - name: localhost
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      role_name_check: false
+verifier:
+  name: ansible

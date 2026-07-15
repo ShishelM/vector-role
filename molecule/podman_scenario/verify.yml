@@ -1,0 +1,16 @@
+---
+- name: Verify Vector installation
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Check if Vector binary exists
+      ansible.builtin.stat:
+        path: /usr/local/bin/vector
+      register: vector_bin
+
+    - name: Assert Vector binary is installed
+      ansible.builtin.assert:
+        that: vector_bin.stat.exists
+        fail_msg: "Vector binary was not found in /usr/local/bin/"
